@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cricket Scoreboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="scoreboard">
+    <h2>Cricket Scoreboard</h2>
+
+    <!-- Rectangle display for runs and wickets -->
+    <div class="score-box">
+      <span id="displayScore">0 - 0</span>
+    </div>
+
+    <!-- Buttons for scoring and extras -->
+    <div class="button-grid">
+      <button onclick="addRun(1)">1</button>
+      <button onclick="addRun(2)">2</button>
+      <button onclick="addRun(3)">3</button>
+      <button onclick="addRun(4)">4</button>
+      <button onclick="addRun(5)">5</button>
+      <button onclick="addRun(6)">6</button>
+      <button onclick="addExtra('noball')">No Ball</button>
+      <button onclick="addExtra('wide')">Wide Ball</button>
+      <button onclick="addExtra('dead')">Dead Ball</button>
+      <button onclick="addWicket()">Wicket</button>
+    </div>
+
+    <!-- Over and ball info -->
+    <div class="stats">
+      <p><strong>Overs:</strong> <span id="overs">0</span>.<span id="balls">0</span></p>
+      <p><strong>Total Balls Bowled:</strong> <span id="totalBalls">0</span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
