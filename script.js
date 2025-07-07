@@ -1,132 +1,147 @@
-// Player objects
-let batter1 = { runs: 0, balls: 0 };
-let batter2 = { runs: 0, balls: 0 };
-let striker = 1; // 1 = batter1, 2 = batter2
+// Initialize starting two batters
+let batters = [
+  { name: "Batter 1", runs: 0, balls: 0, fours: 0, sixes: 0, status: "not out" },
+  { name: "Batter 2", runs: 0, balls: 0, fours: 0, sixes: 0, status: "not out" },
+];
 
-// Team stats
+// Track striker and non-striker by index
+let striker = 0;
+let nonStriker = 1;
+let nextBatter = 3; // Next batter's number
+
+// Match stats
 let totalRuns = 0;
-let wickets = 0;
-let overs = 0;
-let balls = 0; // 0–5 (6 balls per over)
+let totalBalls = 0;
+let totalWickets = 0;
+let extras = 0;
+let fallOfWickets = [];
 
-function updateUI() {
+// Handle runs from a ball
+function playBall(run) {
+  const batter = batters[striker];
+
   // Update batter stats
-  document.getElementById("p1Runs").textContent = batter1.runs;
-  document.getElementById("p1Balls").textContent = batter1.balls;
-  document.getElementById("p2Runs").textContent = batter2.runs;
-  document.getElementById("p2Balls").textContent = batter2.balls;
-
-  // Update team stats
-  document.getElementById("totalRuns").textContent = totalRuns;
-  document.getElementById("wickets").textContent = wickets;
-  document.getElementById("overs").textContent = overs;
-  document.getElementById("balls").textContent = balls;
-
-  // Highlight striker
-  document.getElementById("player1").querySelector("strong").textContent =
-    striker === 1 ? "Batter 1 (Striker):" : "Batter 1:";
-  document.getElementById("player2").querySelector("strong").textContent =
-    striker === 2 ? "Batter 2 (Striker):" : "Batter 2:";
-}
-
-function addRun(run) {
+  batter.runs += run;
+  batter.balls += 1;
   totalRuns += run;
-  if (striker === 1) {
-    batter1.runs += run;
-    batter1.balls += 1;
-  } else {
-    batter2.runs += run;
-    batter2.balls += 1;
-  }
+  totalBalls++;
 
-  // Ball bowled
-  balls += 1;
+  // Count 4s and 6s
+  if (run === 4) batter.fours += 1;
+  if (run === 6) batter.sixes += 1;
 
-  // Over completed?
-  if (balls === 6) {
-    overs += 1;
-    balls = 0;
+  // Swap strike if runs is odd
+  if (run % 2 === 1) switchStrike();
 
-    // Strike changes every 2 overs
-    if (overs % 2 === 0) {
-      switchStrike();
-    }
-  }
+  // Swap strike at end of over
+  if (totalBalls % 6 === 0) switchStrike();
 
-  // Change strike if odd run
-  if (run % 2 === 1) {
-    switchStrike();
-  }
-
-  updateUI();
+  updateScoreboard();
 }
 
-function addWicket() {
-  wickets += 1;
-
-  // Ball bowled
-  balls += 1;
-  if (striker === 1) {
-    batter1.balls += 1;
-  } else {
-    batter2.balls += 1;
-  }
-
-  // Over completed?
-  if (balls === 6) {
-    overs += 1;
-    balls = 0;
-
-    if (overs % 2 === 0) {
-      switchStrike();
-    }
-  }
-
-  updateUI();
+// Handle extras like wide, no-ball
+function extraRun() {
+  extras++;
+  totalRuns++;
+  // Ball does NOT count
+  updateScoreboard();
 }
 
-function addExtra() {
-  totalRuns += 1;
-  // Extra run — ball does not count
-  updateUI();
-}
+// Register a wicket and send new batter
+function registerWicket() {
+  // Set current striker as out
+  batters[striker].status = "out";
+  totalWickets++;
+  totalBalls++;
 
-function nextBall() {
-  // Dot ball with no run
-  if (striker === 1) {
-    batter1.balls += 1;
-  } else {
-    batter2.balls += 1;
+  // Record fall of wicket
+  fallOfWickets.push(`${totalRuns}/${totalWickets}`);
+
+  // Bring in next batter (up to 11)
+  if (nextBatter <= 11) {
+    batters.push({
+      name: `Batter ${nextBatter}`,
+      runs: 0,
+      balls: 0,
+      fours: 0,
+      sixes: 0,
+      status: "not out",
+    });
+    striker = batters.length - 1;
+    nextBatter++;
   }
 
-  balls += 1;
+  // Swap strike at over end
+  if (totalBalls % 6 === 0) switchStrike();
 
-  if (balls === 6) {
-    overs += 1;
-    balls = 0;
-
-    if (overs % 2 === 0) {
-      switchStrike();
-    }
-  }
-
-  updateUI();
+  updateScoreboard();
 }
 
+// End over manually (if user wants control)
+function endOver() {
+  if (totalBalls % 6 !== 0) {
+    alert("Over not yet completed!");
+    return;
+  }
+  switchStrike();
+  updateScoreboard();
+}
+
+// Switch striker and non-striker
 function switchStrike() {
-  striker = striker === 1 ? 2 : 1;
+  [striker, nonStriker] = [nonStriker, striker];
 }
 
-function reset() {
-  batter1 = { runs: 0, balls: 0 };
-  batter2 = { runs: 0, balls: 0 };
-  striker = 1;
+// Calculate strike rate (SR = Runs / Balls * 100)
+function calculateSR(runs, balls) {
+  return balls === 0 ? "0.00" : ((runs / balls) * 100).toFixed(2);
+}
+
+// Update the DOM with all live data
+function updateScoreboard() {
+  document.getElementById("teamScore").textContent = totalRuns;
+  document.getElementById("teamWickets").textContent = totalWickets;
+  document.getElementById("teamOvers").textContent = `${Math.floor(totalBalls / 6)}.${totalBalls % 6}`;
+  document.getElementById("extras").textContent = extras;
+  document.getElementById("fow").textContent = fallOfWickets.join(", ") || "-";
+
+  const tbody = document.getElementById("battingCard");
+  tbody.innerHTML = "";
+
+  batters.forEach((batter, index) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${batter.name}</td>
+      <td>${batter.runs}</td>
+      <td>${batter.balls}</td>
+      <td>${batter.fours}</td>
+      <td>${batter.sixes}</td>
+      <td>${calculateSR(batter.runs, batter.balls)}</td>
+      <td>${batter.status}</td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+// Reset everything for a new match
+function resetGame() {
+  batters = [
+    { name: "Batter 1", runs: 0, balls: 0, fours: 0, sixes: 0, status: "not out" },
+    { name: "Batter 2", runs: 0, balls: 0, fours: 0, sixes: 0, status: "not out" },
+  ];
+  striker = 0;
+  nonStriker = 1;
+  nextBatter = 3;
   totalRuns = 0;
-  wickets = 0;
-  overs = 0;
-  balls = 0;
-  updateUI();
+  totalBalls = 0;
+  totalWickets = 0;
+  extras = 0;
+  fallOfWickets = [];
+  updateScoreboard();
 }
 
-// Initial load
-updateUI();
+// Initialize scoreboard
+updateScoreboard();

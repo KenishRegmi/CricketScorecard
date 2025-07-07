@@ -2,46 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Traditional Cricket Scorecard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cricket Scorecard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Scoreboard Container -->
   <div class="scoreboard">
-    <h2>Cricket Scorecard</h2>
-    
-    <!-- Player Info -->
-    <div class="players">
-      <div class="player" id="player1">
-        <strong>Batter 1 (Striker):</strong>
-        <p>Runs: <span id="p1Runs">0</span> | Balls: <span id="p1Balls">0</span></p>
-      </div>
-      <div class="player" id="player2">
-        <strong>Batter 2:</strong>
-        <p>Runs: <span id="p2Runs">0</span> | Balls: <span id="p2Balls">0</span></p>
-      </div>
-    </div>
+    <h2>Scorecard - Team A</h2>
 
-    <!-- Team Score -->
-    <div class="team-score">
-      <p><strong>Total:</strong> <span id="totalRuns">0</span>/<span id="wickets">0</span></p>
-      <p><strong>Overs:</strong> <span id="overs">0</span>.<span id="balls">0</span></p>
-    </div>
+    <!-- Team Total -->
+    <p><strong>Total:</strong> <span id="teamScore">0</span>/<span id="teamWickets">0</span> 
+      (<span id="teamOvers">0.0</span>)</p>
+    <p><strong>Extras:</strong> <span id="extras">0</span></p>
+
+    <!-- Batting Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Batter</th>
+          <th>R</th>
+          <th>B</th>
+          <th>4s</th>
+          <th>6s</th>
+          <th>SR</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="battingCard"></tbody>
+    </table>
+
+    <!-- Fall of Wickets -->
+    <p><strong>Fall of Wickets:</strong> <span id="fow">-</span></p>
   </div>
 
-  <!-- Buttons at Bottom -->
-  <div class="button-grid">
-    <button onclick="addRun(0)">0</button>
-    <button onclick="addRun(1)">1</button>
-    <button onclick="addRun(2)">2</button>
-    <button onclick="addRun(3)">3</button>
-    <button onclick="addRun(4)">4</button>
-    <button onclick="addRun(6)">6</button>
-    <button onclick="addExtra()">WD</button>
-    <button onclick="addWicket()">WK</button>
-    <button onclick="nextBall()">NB</button>
-    <button onclick="reset()">Reset</button>
+  <!-- Round Buttons for Match Controls -->
+  <div class="controls">
+    <button onclick="playBall(0)">0</button>
+    <button onclick="playBall(1)">1</button>
+    <button onclick="playBall(2)">2</button>
+    <button onclick="playBall(3)">3</button>
+    <button onclick="playBall(4)">4</button>
+    <button onclick="playBall(6)">6</button>
+    <button onclick="extraRun()">NB</button>
+    <button onclick="extraRun()">WD</button>
+    <button onclick="registerWicket()">WK</button>
+    <button onclick="endOver()">End Over</button>
+    <button onclick="resetGame()">Reset</button>
   </div>
 
   <script src="script.js"></script>

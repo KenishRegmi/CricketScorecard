@@ -1,46 +1,164 @@
+/* === General Styles === */
 body {
-  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
+  margin: 20px;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
+/* === Scoreboard Container === */
 .scoreboard {
-  padding: 20px;
+  background: #fff;
+  max-width: 900px;
+  width: 100%;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+  box-sizing: border-box;
 }
 
-.players, .team-score {
+/* Title */
+.scoreboard h2 {
+  margin-top: 0;
   margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 28px;
+  color: #1e88e5;
+  text-align: center;
 }
 
-.player {
-  background: #e3f2fd;
-  padding: 10px;
-  margin-bottom: 10px;
+/* Team summary (total & extras) */
+.scoreboard p {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 8px 0;
+  text-align: center;
+  color: #444;
+}
+
+/* === Batting Table Styles === */
+.scoreboard table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px; /* space between rows */
+  font-size: 16px;
+  table-layout: fixed;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fafafa;
+}
+
+/* Header row */
+.scoreboard thead tr {
+  background-color: #1e88e5;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Header cells */
+.scoreboard thead th {
+  padding: 14px 12px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.3);
+  user-select: none;
+  word-wrap: break-word;
+}
+
+/* Remove right border on last header */
+.scoreboard thead th:last-child {
+  border-right: none;
+}
+
+/* Body rows */
+.scoreboard tbody tr {
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
   border-radius: 10px;
+  transition: background-color 0.3s ease;
+  cursor: default;
 }
 
-.button-grid {
+/* Hover effect on rows */
+.scoreboard tbody tr:hover {
+  background-color: #e3f2fd;
+}
+
+/* Body cells */
+.scoreboard tbody td {
+  padding: 12px 10px;
+  text-align: center;
+  border-right: 1px solid #f0f0f0;
+  word-wrap: break-word;
+}
+
+/* Remove right border on last cell */
+.scoreboard tbody td:last-child {
+  border-right: none;
+}
+
+/* Striker row highlight */
+.scoreboard tbody tr.striker {
+  background-color: #bbdefb !important;
+  font-weight: 700;
+}
+
+/* === Fall of Wickets Paragraph === */
+.scoreboard > p strong {
+  color: #1e88e5;
+}
+
+/* === Controls Section === */
+.controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  padding: 20px;
   justify-content: center;
-  background: #fff;
-  border-top: 2px solid #ddd;
+  gap: 14px;
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.button-grid button {
-  width: 60px;
-  height: 60px;
+/* Round buttons */
+.controls button {
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background-color: #2196f3;
-  color: #fff;
   border: none;
-  font-size: 16px;
+  background-color: #1e88e5;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(30, 136, 229, 0.4);
+  transition: all 0.25s ease;
+  user-select: none;
 }
 
-.button-grid button:hover {
-  background-color: #1976d2;
+.controls button:hover {
+  background-color: #1565c0;
+  box-shadow: 0 6px 20px rgba(21, 101, 192, 0.6);
+  transform: scale(1.1);
+}
+
+/* Responsive: scroll table on small screens */
+@media (max-width: 700px) {
+  .scoreboard table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .controls button {
+    width: 54px;
+    height: 54px;
+    font-size: 16px;
+  }
 }
